@@ -12,9 +12,11 @@ import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
 from tqdm import tqdm
 import time
+
 from utils import *
 from models import *
 from data_transform import *
+from models import MNISTNN
 import sys
 
 unloader = transforms.ToPILImage()
@@ -43,7 +45,7 @@ def DataSet_distill_clean_data(model, dataloader, distill_data_name, model_name)
         torch.save(list_clean_data_knowledge_distill, './dataset/distill_' + distill_data_name + "_gtsrb")
     else:
         torch.save(list_clean_data_knowledge_distill, './dataset/distill_' + distill_data_name)
-    
+
 
 # def One_hot_Encoder(dataloader):
 #     list_one_hot = []
@@ -66,9 +68,11 @@ model_name = params['model']
 model_set = {
         'resnets': ResNetS(nclasses=10),
         'vgg_face': VGG_16(),
-        'gtsrb': gtsrb()
+        'gtsrb': gtsrb(),
+        'MNISTNN': MNISTNN.Net()
         }
-print("model_name: ",model_name)
+print("model_name: ", model_name)
+
 model = model_set[model_name]
 
 ck_name = params['checkpoint']
@@ -91,7 +95,8 @@ if distill_data_name == "cifar100":
     test_dataset = torchvision.datasets.CIFAR100(root='./data', train=True,download = True, transform=cifar100_transforms)
 elif distill_data_name == "lfw":
     test_dataset = torchvision.datasets.LFWPeople(root='./data', download = True, transform=LFW_transforms)
-
+elif distill_data_name == "MNIST":
+    test_dataset = torchvision.datasets.FashionMNIST('./data', train=True, transform=MNIST_transforms, download=True)
 
 testloader = DataLoader(test_dataset, batch_size=batch_size)
 

@@ -17,6 +17,10 @@ def read_config():
     return params
 
 def load_model(model, sd, old_format=False):
+    if sd == 'checkpoints/mnist_cnn_clean':
+        sd = torch.load('%s.t7' % sd, map_location='cpu')
+        model.load_state_dict(sd)
+        return model, sd
     sd = torch.load('%s.t7' % sd, map_location='cpu')
     new_sd = model.state_dict()
     if 'state_dict' in sd.keys():

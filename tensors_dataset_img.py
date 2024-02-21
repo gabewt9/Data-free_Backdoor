@@ -41,11 +41,11 @@ class TensorDatasetImg(Dataset):
         img = self.data_tensor[index]
         # img.save('img'+str(index)+'.png')
 
-        if self.transform != None:
+        if self.transform != None and type(img) != torch.Tensor:
             img = self.transform(img).float()
             #print(img.shape)
             #print(type(img))
-        else:
+        elif type(img) != torch.Tensor:
             trans = transforms.ToTensor()
             img = trans(img)
         

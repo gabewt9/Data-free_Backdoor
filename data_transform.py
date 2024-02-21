@@ -69,3 +69,8 @@ imagenet_transforms = transforms.Compose([
     transforms.Resize((224,224)),
     transforms.ToTensor()
     ])
+
+MNIST_transforms = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,))
+        ])
